@@ -133,14 +133,27 @@ textarea {
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--border-color);
+  background: var(--button-bg);
   background-clip: padding-box;
   border: 0;
-  border-radius: 0;
+  border-radius: 10px;
 
   &:hover {
     background-color: var(--border-color);
   }
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
 
 .eyebrow {
   text-transform: uppercase;
