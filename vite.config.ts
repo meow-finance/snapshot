@@ -31,5 +31,6 @@ export default defineConfig({
     include: ['color'],
     // @ts-ignore
     allowNodeBuiltins: ['stream']
-  }
+  },
+  
 });

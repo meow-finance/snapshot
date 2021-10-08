@@ -38,8 +38,8 @@ function updateChoices() {
         @change="updateChoices"
       >
         <template #item="{ element, index }">
-          <div class="mb-2">
-            <UiButton class="flex justify-between w-full button--active !px-3">
+          <div class="mb-2" >
+            <UiButton class="flex justify-between w-full button--active !px-3" style="padding-top: 5px;">
               <div>({{ getNumberWithOrdinal(index + 1) }})</div>
               <div class="truncated w-full mx-2">
                 {{ proposal.choices[element - 1] }}

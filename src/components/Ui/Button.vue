@@ -23,12 +23,12 @@ defineProps({
 <style scoped lang="scss">
 .button {
   border: 1px solid var(--border-color);
-  background-color: transparent;
-  color: var(--link-color);
+  background-color: var(--button-bg);
+  color: var(--button-text);
   border-radius: 23px;
   outline: none;
-  line-height: 46px;
-  height: 46px;
+  line-height: 24px;
+  height: 35px;
   font-size: 18px;
 
   &.button--submit {
@@ -43,19 +43,27 @@ defineProps({
     }
 
     &:disabled {
-      color: var(--link-color) !important;
+      color: var(--button-text) !important;
       border: 1px solid var(--border-color);
       background-color: var(--border-color);
     }
   }
 
   &.button--active {
-    border-color: var(--link-color) !important;
+    border-color: var(--border-color) !important;
+    background-color: #986be9;
+
+    &:hover {
+      color: white;
+      background-color: #986be9;
+      border: 1px solid var(--primary-color);
+    }
   }
 
   &:hover {
-    color: var(--link-color);
-    border-color: var(--link-color);
+    color: var(--button-text);
+    border-color: var(--button-text);
+    background-color: var(--button-hover);
   }
 
   &:disabled {

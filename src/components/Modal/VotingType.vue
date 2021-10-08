@@ -27,9 +27,9 @@ function select(id) {
     <template v-slot:header>
       <h3>{{ $t('voting.selectVoting') }}</h3>
     </template>
-    <div class="mt-4 mx-0 md:mx-4">
+    <div class="mt-4 mx-0 md:mx-4" >
       <a v-for="type in types" :key="type" @click="select(type)">
-        <Block class="button--submit">
+        <Block class="button--submit block" style="margin-bottom: 10px !important;">
           <h3 v-text="$t(`voting.${type}`)" />
           <div v-text="$t(`voting.description.${type}`)" class="text-color" />
         </Block>
@@ -37,3 +37,10 @@ function select(id) {
     </div>
   </UiModal>
 </template>
+
+<style lang="scss" scoped>
+.block:hover
+{
+  background-color: var(--focus);
+}
+</style>

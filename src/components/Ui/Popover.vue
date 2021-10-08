@@ -67,9 +67,10 @@ watch(open, () => {
 
 <style scoped lang="scss">
 .custom-content {
-  z-index: 50;
+  z-index: 9;
+  position: relative;
   min-width: 300px;
-  background-color: var(--header-bg);
+  background-color: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 0 20px -6px var(--border-color);

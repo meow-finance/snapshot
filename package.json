@@ -4,9 +4,13 @@
   "scripts": {
     "preinstall": "git submodule update --init --remote",
     "dev": "vite",
+    "prod": "vite --mode prod",
     "build": "vite build",
+    "buildprod": "vite build --mode prod",
     "lint": "eslint './src/*/**/*.{ts,vue,json}' --fix",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "firebasedev": "vite build && firebase deploy --only hosting:testnet",
+    "firebaseprod": "vite build --mode prod && firebase deploy --only hosting:prod"
   },
   "dependencies": {
     "@apollo/client": "^3.3.21",
@@ -20,6 +24,7 @@
     "@ethersproject/strings": "^5.4.0",
     "@ethersproject/units": "^5.4.0",
     "@ethersproject/wallet": "^5.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "@popperjs/core": "^2.8.3",
     "@portis/web3": "^4.0.5",
     "@snapshot-labs/lock": "github:snapshot-labs/lock#master",
@@ -32,6 +37,7 @@
     "eslint": "^7.32.0",
     "eth-ens-namehash": "^2.0.8",
     "ethereum-blockies-base64": "^1.0.2",
+    "firebase": "^9.1.0",
     "fortmatic": "^2.2.1",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.4",
@@ -50,6 +56,7 @@
     "typescript": "^4.3.5",
     "vue": "^3.2.1",
     "vue-i18n": "^9.1.7",
+    "vue-icon-font": "^1.0.4",
     "vue-router": "^4.0.9",
     "vue-tippy": "^6.0.0-alpha.32",
     "vuedraggable": "^4.0.2"

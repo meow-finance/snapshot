@@ -7,7 +7,7 @@ import { useApp } from '@/composables/useApp';
 import { useWeb3 } from '@/composables/useWeb3';
 import { useTxStatus } from '@/composables/useTxStatus';
 import { useUserSkin } from '@/composables/useUserSkin';
-
+import addImg from '@/assets/images/add.png';
 const { pendingCount } = useTxStatus();
 const { modalAccountOpen } = useModal();
 const { env, domain } = useDomain();
@@ -25,8 +25,9 @@ const space = computed(() => {
   return explore.value.space?.[key];
 });
 
+
 function setTitle() {
-  document.title = space.value?.name ?? 'Snapshot';
+  document.title = space.value?.name ?? 'Meow Governance';
 }
 
 async function handleLogin(connector) {
@@ -50,7 +51,7 @@ onMounted(() => setTitle());
 </script>
 
 <template>
-  <Sticky class="mb-4">
+  <div class="mb-4">
     <div
       v-if="env === 'develop'"
       class="p-3 text-center bg-blue"
@@ -58,17 +59,45 @@ onMounted(() => setTitle());
     >
       {{ $t('demoSite') }}
     </div>
-    <nav id="topnav" class="border-b w-full bg-black">
+    <nav id="topnav" class="border-b w-full">
       <Container>
-        <div class="flex items-center" style="height: 78px">
-          <div class="flex-auto flex items-center">
-            <router-link
+        <div class="flex" style="height: auto;margin-top: 15px;margin-bottom: 10px">
+          <div class="flex-auto flex items-center" 
+          style="display: flex;
+              align-items: flex-start;
+              flex-direction: column;">
+            <div
               :to="{ path: '/' }"
-              class="flex items-center"
-              style="font-size: 24px; padding-top: 4px"
+              class="flex items-center topic-text"
+              style="font-weight: 800;font-size: 60px; padding-top: 12px;;line-height:2.5rem"
             >
-              snapshot
-            </router-link>
+             {{route.path != '/create' ? 'Voting' : 'New Proposal'}}
+            </div>
+            <label style="padding-top: 10px;" >Have your say in the future of the Meow Finance Ecosystem</label>
+             <UiButton 
+              v-if="route.path == '/'"
+             >
+              <UiButtonIcon
+                    :imgsrc="addImg"
+                    width="16"
+                    heigth="16"
+                />
+                <router-link :to="{ path: 'create'}" class="button-text" >
+                    Make a Proposal
+                </router-link>
+             </UiButton>
+
+              <div class="px-4 md:px-0 mb-3" style="padding-top: 0.5rem;"
+                v-if="route.path != '/'"
+              >
+              <router-link
+                :to="domain ? { path: '/' } : { name: 'spaceProposals' }"
+                class="text-color"
+              >
+                <Icon name="back" size="22" class="!align-middle" />
+                {{ 'Voting' }}
+              </router-link>
+            </div>
           </div>
           <div :key="web3.account">
             <template v-if="$auth.isAuthenticated.value">
@@ -135,5 +164,21 @@ onMounted(() => setTitle());
         @close="modalWalletNotice = false"
       />
     </teleport>
-  </Sticky>
+  </div>
 </template>
+
+
+<style scoped lang="scss">
+  .topic-text
+  {
+    color: var(--text-head-color) !important;
+  }
+  .create-color
+  {
+    color: var(--link-color) !important;
+  }
+  .button-text
+  {
+    color: var(--button-text) !important;
+  }
+</style>

@@ -186,7 +186,7 @@ onMounted(async () => {
 <template>
   <Layout v-bind="$attrs">
     <template #content-left>
-      <div class="px-4 md:px-0 mb-3">
+      <!-- <div class="px-4 md:px-0 mb-3">
         <router-link
           :to="domain ? { path: '/' } : { name: 'spaceProposals' }"
           class="text-color"
@@ -194,43 +194,49 @@ onMounted(async () => {
           <Icon name="back" size="22" class="!align-middle" />
           {{ space.name }}
         </router-link>
-      </div>
+      </div> -->
       <div class="px-4 md:px-0">
         <template v-if="loaded">
-          <h1 v-text="proposal.title" class="mb-2" />
-          <div class="mb-4">
-            <UiState :state="proposal.state" class="inline-block" />
-            <UiDropdown
-              top="2.5rem"
-              right="1.5rem"
-              class="float-right mr-2"
-              @select="selectFromShareDropdown"
-              @clickedNoDropdown="startShare(space, proposal)"
-              :items="sharingItems"
-              :hideDropdown="sharingIsSupported"
-            >
-              <div class="pr-1 select-none">
-                <Icon name="upload" size="25" class="!align-text-bottom" />
-                Share
+          <div class="flex" style="justify-content: space-between;">
+              <div class="flex">
+                <UiState style="margin-right: 9px;text-align: center;" :state="proposal.state" class="inline-block" />
+                <Badges style="ext-align: center;" :address="proposal.author" :members="space?.members" /> 
               </div>
-            </UiDropdown>
-            <UiDropdown
-              top="2.5rem"
-              right="1.3rem"
-              class="float-right mr-2"
-              @select="selectFromThreedotDropdown"
-              :items="threeDotItems"
-            >
-              <div class="pr-3">
-                <UiLoading v-if="dropdownLoading" />
-                <Icon v-else name="threedots" size="25" />
+              <div class="flex">
+                  <!-- <UiDropdown
+                    top="2.5rem"
+                    right="1.3rem"
+                    class="float-right mr-2"
+                    @select="selectFromThreedotDropdown"
+                    :items="threeDotItems"
+                  >
+                    <div class="pr-3">
+                      <UiLoading v-if="dropdownLoading" />
+                      <Icon v-else name="threedots" size="25" />
+                    </div>
+                  </UiDropdown> -->
+                  <UiDropdown
+                    top="2.5rem"
+                    right="1.5rem"
+                    class="float-right mr-2"
+                    @select="selectFromShareDropdown"
+                    @clickedNoDropdown="startShare(space, proposal)"
+                    :items="sharingItems"
+                    :hideDropdown="sharingIsSupported"
+                  >
+                    <div class="pr-1 select-none">
+                      <Icon name="upload" size="25" class="!align-text-bottom" />
+                      Share
+                    </div>
+                  </UiDropdown>
               </div>
-            </UiDropdown>
           </div>
+          <h1 v-text="proposal.title" class="mb-2" style="padding-top: 0.5rem;" />
           <UiMarkdown :body="proposal.body" class="mb-6" />
         </template>
         <PageLoading v-else />
       </div>
+
       <BlockCastVote
         v-if="loaded && proposal.state === 'active'"
         :proposal="proposal"
@@ -255,8 +261,8 @@ onMounted(async () => {
       />
     </template>
     <template #sidebar-right v-if="loaded">
-      <Block :title="$t('information')">
-        <div class="mb-1">
+      <BlockShadow :title="$t('information')">
+        <!-- <div class="mb-1">
           <b>{{ $t('strategies') }}</b>
           <span
             @click="modalStrategiesOpen = true"
@@ -273,7 +279,7 @@ onMounted(async () => {
               <span v-show="symbolIndex !== symbols.length - 1" class="ml-1" />
             </span>
           </span>
-        </div>
+        </div> -->
         <div class="mb-1">
           <b>{{ $t('author') }}</b>
           <User
@@ -329,7 +335,7 @@ onMounted(async () => {
             </a>
           </div>
         </div>
-      </Block>
+      </BlockShadow>
       <BlockResults
         :id="id"
         :loaded="loadedResults"

@@ -30,23 +30,23 @@ watch(open, (val, prev) => {
         md:rounded-md
       "
     >
-      <div v-if="$slots.header" class="border-b pt-4 pb-3 text-center">
+      <div v-if="$slots.header" class="content-box-head">
         <slot name="header" />
       </div>
       <div class="modal-body">
         <slot />
       </div>
-      <div v-if="$slots.footer" class="border-t p-4 text-center">
+      <div v-if="$slots.footer" class="p-4 text-center">
         <slot name="footer" />
       </div>
-      <a @click="$emit('close')" class="absolute right-0 top-1 p-4 text-color">
+      <a @click="$emit('close')" class="absolute top-right  right-0 top-1 p-4 text-color">
         <Icon name="close" />
       </a>
     </div>
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .modal {
   position: fixed;
   display: flex;
@@ -69,7 +69,7 @@ watch(open, (val, prev) => {
   }
 
   .shell {
-    border: 1px solid var(--border-color);
+    border: 1px solid #ffff;
     background-color: var(--bg-color);
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -103,5 +103,16 @@ watch(open, (val, prev) => {
       overflow-x: hidden;
     }
   }
+}
+.content-box-head
+{
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+}
+.top-right
+{
+  top: -10px !important;
+  right: -10px !important;
 }
 </style>

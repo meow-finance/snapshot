@@ -227,18 +227,18 @@ watchEffect(async () => {
 <template>
   <Layout v-bind="$attrs">
     <template #content-left>
-      <div v-if="space?.name" class="px-4 md:px-0 mb-3">
+      <!-- <div v-if="space?.name" class="px-4 md:px-0 mb-3">
         <router-link :to="{ name: 'spaceProposals' }" class="text-color">
           <Icon name="back" size="22" class="!align-middle" />
           {{ space.name }}
         </router-link>
-      </div>
+      </div> -->
       <div class="px-4 md:px-0">
         <h1 v-if="loaded" v-text="$t('settings.header')" class="mb-4" />
         <PageLoading v-else />
       </div>
       <template v-if="loaded">
-        <Block title="ENS">
+        <BlockShadow title="ENS">
           <UiButton class="flex w-full mb-2">
             <input
               readonly
@@ -285,9 +285,9 @@ watchEffect(async () => {
               />
             </span>
           </Block>
-        </Block>
+        </BlockShadow>
         <div v-if="space || isOwner">
-          <Block :title="$t('settings.profile')">
+          <BlockShadow :title="$t('settings.profile')">
             <div class="mb-2">
               <UiInput v-model="form.name" :error="inputError('name')">
                 <template v-slot:label>{{ $t(`settings.name`) }}*</template>
@@ -365,8 +365,8 @@ watchEffect(async () => {
                 {{ $t('settings.hideSpace') }}
               </div>
             </div>
-          </Block>
-          <Block :title="$t('settings.customDomain')">
+          </BlockShadow>
+          <BlockShadow :title="$t('settings.customDomain')">
             <UiInput
               v-model="form.domain"
               placeholder="e.g. vote.balancer.fi"
@@ -393,8 +393,8 @@ watchEffect(async () => {
                 {{ $t(`settings.skin`) }}
               </template>
             </UiInput>
-          </Block>
-          <Block :title="$t('settings.admins')" v-if="isOwner">
+          </BlockShadow>
+          <BlockShadow :title="$t('settings.admins')" v-if="isOwner">
             <Block
               :style="`border-color: red !important`"
               v-if="inputError('admins')"
@@ -410,8 +410,8 @@ watchEffect(async () => {
                 style="font-size: 18px"
               />
             </UiButton>
-          </Block>
-          <Block :title="$t('settings.authors')">
+          </BlockShadow>
+          <BlockShadow :title="$t('settings.authors')">
             <Block
               :style="`border-color: red !important`"
               v-if="inputError('members')"
@@ -427,8 +427,8 @@ watchEffect(async () => {
                 style="font-size: 18px"
               />
             </UiButton>
-          </Block>
-          <Block :title="$t('settings.strategies') + '*'">
+          </BlockShadow>
+          <BlockShadow :title="$t('settings.strategies') + '*'">
             <div
               v-for="(strategy, i) in form.strategies"
               :key="i"
@@ -463,8 +463,8 @@ watchEffect(async () => {
             <UiButton @click="handleAddStrategy" class="block w-full">
               {{ $t('settings.addStrategy') }}
             </UiButton>
-          </Block>
-          <Block :title="$t('settings.proposalValidation')">
+          </BlockShadow>
+          <BlockShadow :title="$t('settings.proposalValidation')">
             <div class="mb-2">
               <UiInput
                 @click="modalValidationOpen = true"
@@ -496,8 +496,8 @@ watchEffect(async () => {
                 </div>
               </div>
             </div>
-          </Block>
-          <Block :title="$t('plugins')">
+          </BlockShadow>
+          <BlockShadow :title="$t('plugins')">
             <div v-if="form?.plugins">
               <div
                 v-for="(plugin, name, index) in form.plugins"
@@ -523,12 +523,12 @@ watchEffect(async () => {
             <UiButton @click="handleAddPlugins" class="block w-full">
               {{ $t('settings.addPlugin') }}
             </UiButton>
-          </Block>
+          </BlockShadow>
         </div>
       </template>
     </template>
     <template v-if="(loaded && isOwner) || (loaded && isAdmin)" #sidebar-right>
-      <Block :title="$t('actions')">
+      <BlockShadow :title="$t('actions')">
         <UiButton @click="handleReset" class="block w-full mb-2">
           {{ $t('reset') }}
         </UiButton>
@@ -540,7 +540,7 @@ watchEffect(async () => {
         >
           {{ $t('save') }}
         </UiButton>
-      </Block>
+      </BlockShadow>
     </template>
   </Layout>
   <teleport to="#modal">
@@ -574,3 +574,10 @@ watchEffect(async () => {
     />
   </teleport>
 </template>
+
+
+<style lang="scss" scoped>
+.rounded-3xl {
+    border-radius: 1rem;
+}
+</style>

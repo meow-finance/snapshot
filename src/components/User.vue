@@ -18,9 +18,11 @@ watchEffect(() => {
 
 <template>
   <span>
-    <UiPopover :options="{ offset: [0, 12], placement: 'bottom-start' }">
-      <template v-slot:item>
-        <a class="flex flex-nowrap">
+    <div :options="{ offset: [0, 12], placement: 'bottom-start' }">
+        <a class="flex flex-nowrap"
+          :href="_explorer(space ? space.network : '1', address)"
+           target="_blank"
+        >
           <UiAvatar
             :imgsrc="_getUrl(profile?.image)"
             :address="address"
@@ -28,10 +30,9 @@ watchEffect(() => {
             class="mr-2"
           />
           {{ username }}
-          <Badges :address="address" :members="space?.members" />
+          <!-- <Badges :address="address" :members="space?.members" /> -->
         </a>
-      </template>
-      <template v-slot:content>
+      <!-- <template v-slot:content>
         <div class="m-4 mb-0 text-center">
           <UiAvatar
             :imgsrc="_getUrl(profile?.image)"
@@ -66,7 +67,7 @@ watchEffect(() => {
             </UiButton>
           </a>
         </div>
-      </template>
-    </UiPopover>
+      </template> -->
+    </div>
   </span>
 </template>

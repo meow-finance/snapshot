@@ -15,8 +15,12 @@ const { lastSeenProposals, updateLastSeenProposal } = useUnseenProposals();
 const { web3 } = useWeb3();
 
 const loading = ref(false);
+const proposalsInit = ref([]);
 const proposals = ref([]);
-const filterBy = ref('all');
+//active , closed , pending , all
+const filterBy = ref('active');
+//core , community , all
+const createBy = ref('core');
 
 const spaceMembers = computed(() =>
   props.space.members.length < 1 ? ['none'] : props.space.members
@@ -39,14 +43,23 @@ async function loadProposals(skip = 0) {
         first: loadBy,
         skip,
         space: props.spaceId,
-        state: filterBy.value === 'core' ? 'all' : filterBy.value,
-        author_in: filterBy.value === 'core' ? spaceMembers.value : []
+        state: filterBy.value ,
+        author_in: []
       }
     },
     'proposals'
   );
   stopLoadingMore.value = proposalsObj?.length < loadBy;
-  proposals.value = proposals.value.concat(proposalsObj);
+  proposalsInit.value = proposalsInit.value.concat(proposalsObj);
+  //wait for props.space.members
+  let delayms = 0;
+  if (props.space.members == undefined) {
+    delayms = 1000;
+  };
+  await setTimeout(async () => {
+    await filter();
+  }, delayms);
+  
 }
 
 onMounted(load());
@@ -57,17 +70,48 @@ async function load() {
   loading.value = false;
 }
 
+async function filter()
+{ 
+  proposals.value = proposalsInit.value.filter((proposal,inx) => 
+  {
+    if (createBy.value == "core")
+    {
+        return spaceMembers.value.includes(proposal.author) ? filterBy.value == proposal.state ? true : false : false;
+    }
+    else if (createBy.value == "community")
+    {
+      return !spaceMembers.value.includes(proposal.author) ? filterBy.value == proposal.state ? true : false  : false;
+    }
+    else
+    {
+      return filterBy.value == proposal.state ? true : false 
+    }
+  });
+}
+
 function selectState(e) {
-  filterBy.value = e;
-  proposals.value = [];
-  limit.value = loadBy;
-  load();
+  if ("core,community,all".indexOf(e) >= 0)
+  {
+    createBy.value = e;
+    filter();
+  }
+  else
+  {
+    filterBy.value = e;
+    proposalsInit.value = [];
+    limit.value = loadBy;
+    load();
+  }
 }
 
 const { profiles, addressArray } = useProfiles();
 
 watch(proposals, () => {
-  addressArray.value = proposals.value.map(proposal => proposal.author);
+  if (proposals.value != null) addressArray.value = proposals.value.map(proposal => proposal.author);
+});
+
+watch(filterBy, () => {
+  selectState(filterBy.value);
 });
 
 watch([proposals, web3Account], () => {
@@ -85,18 +129,18 @@ watch([proposals, web3Account], () => {
 
 <template>
   <Layout>
-    <template #sidebar-left>
+    <!-- <template #sidebar-left>
       <BlockSpace :space="space" />
-    </template>
-    <template #content-right>
+    </template> -->
+    <template #content-center>
       <div class="px-4 md:px-0 mb-3 flex">
         <div class="flex-auto">
-          <div v-text="space.name" />
+          <!-- <div v-text="space.name" /> -->
           <div class="flex items-center flex-auto">
-            <h2>{{ $t('proposals.header') }}</h2>
+            <h1>{{ $t('proposals.header') }}</h1>
           </div>
         </div>
-        <UiDropdown
+        <!-- <UiDropdown
           top="3.5rem"
           right="1.25rem"
           @select="selectState"
@@ -112,26 +156,84 @@ watch([proposals, web3Account], () => {
             {{ $t(`proposals.states.${filterBy}`) }}
             <Icon size="14" name="arrow-down" class="mt-1 mr-1" />
           </UiButton>
-        </UiDropdown>
+        </UiDropdown> -->
       </div>
 
-      <Block v-if="loading" :slim="true">
-        <RowLoading class="my-2" />
-      </Block>
+      <div class="content-box">
+        <div class="content-box-head">
+          <div class="header-menu" @click="selectState('core')" :class="createBy == 'core' ? 'menu-active' : ''" >
+            <IconFont name="brand-hallmark" size="22" lineHeight="13"/>
+              <span>Core</span>
+          </div>
+           <div class="header-menu" @click="selectState('community')" :class="createBy == 'community' ? 'menu-active' : ''"  style="width:180px" >
+              <IconFont name="users-social" size="22" lineHeight="13"/>
+              <span>Community</span>
+          </div>
+           <div class="header-menu" @click="selectState('all')" :class="createBy == 'all' ? 'menu-active' : ''"  >
+              <span>All</span>
+          </div>
+        </div>
+        <div class="content-box-detail">
+          <div class="content-filter">
+            <UiMeowRadio class="meow-filter" height="25" width="25" v-model="filterBy" value="active" :text="$t(`proposals.states.active`)" />
+            <UiMeowRadio class="meow-filter" height="25" width="25" v-model="filterBy" value="pending" :text="$t(`proposals.states.pending`)" />
+            <UiMeowRadio class="meow-filter" height="25" width="25" v-model="filterBy" value="closed" :text="$t(`proposals.states.closed`)" />
+          </div>
+          <div>
+              <BlockBottom v-if="loading" :slim="true">
+                <RowLoading class="my-2" />
+              </BlockBottom>
+              <NoResults :block="true" v-else-if="proposals.length < 1" />
+              <div v-else > 
+                <BlockBottom :slim="true" v-for="(proposal, i) in proposals" :key="i" class="block">
+                  <TimelineProposal :proposal="proposal" :profiles="profiles" />
+                </BlockBottom>
+              </div>
+              <div
+                style="height: 10px; width: 10px; position: absolute"
+                ref="endElement"
+              />
+              <BlockBottom v-if="loadingMore && !loading" :slim="true">
+                <RowLoading class="my-2" />
+              </BlockBottom>
+          </div>
 
-      <NoResults :block="true" v-else-if="proposals.length < 1" />
-      <div v-else>
-        <Block :slim="true" v-for="(proposal, i) in proposals" :key="i">
-          <TimelineProposal :proposal="proposal" :profiles="profiles" />
-        </Block>
+        </div>
       </div>
-      <div
-        style="height: 10px; width: 10px; position: absolute"
-        ref="endElement"
-      />
-      <Block v-if="loadingMore && !loading" :slim="true">
-        <RowLoading class="my-2" />
-      </Block>
+
     </template>
   </Layout>
 </template>
+
+<style scoped lang="scss">
+.block:hover
+{
+  background-color: var(--focus);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.mb-4
+{
+  margin-bottom: 5px !important;
+}
+.meow-filter
+{
+  padding-right: 15px;
+}
+.content-filter
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 11px;
+    border-bottom-width: 2px;
+    padding-bottom: 6px;
+}
+ 
+ .menu-active
+ {
+    background: #FFFFFF;
+    color: var(--text-head-color); 
+ }
+
+</style>

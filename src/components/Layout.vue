@@ -19,5 +19,8 @@
     <div v-if="$slots['sidebar-right']" class="w-full lg:w-4/12 float-left">
       <slot name="sidebar-right" />
     </div>
+     <div v-if="$slots['content-center']" class="w-full">
+      <slot name="content-center" />
+    </div>
   </Container>
 </template>

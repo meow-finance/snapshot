@@ -8,6 +8,9 @@ export let defaultLocale = 'en-US';
 
 export function getBrowserLocale() {
   if (typeof navigator !== 'undefined') {
+
+    //set language to english
+    navigator['userLanguage']  = "en-US";
     return (
       navigator['userLanguage'] ||
       navigator['language'] ||

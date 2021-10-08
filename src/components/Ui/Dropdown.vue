@@ -92,7 +92,7 @@ li:hover {
   right: 0;
   top: var(--top);
   width: auto;
-  background-color: var(--header-bg);
+  background-color: #CDBBF9;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 0 20px -6px var(--border-color);

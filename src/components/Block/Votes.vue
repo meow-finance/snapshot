@@ -63,7 +63,7 @@ watch(votes, () => {
 </script>
 
 <template>
-  <Block
+  <BlockShadow
     v-if="isZero()"
     :title="$t('votes')"
     :counter="votes.length"
@@ -139,5 +139,5 @@ watch(votes, () => {
         :authorIpfsHash="authorIpfsHash"
       />
     </teleport>
-  </Block>
+  </BlockShadow>
 </template>

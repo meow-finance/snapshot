@@ -7,11 +7,10 @@ const props = defineProps({
   disabled: Boolean,
   maxlength: [Number, String],
   additionalClass: String,
-  border:String,
   required: {
     type: Boolean,
     default: true
-  },
+  }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -28,6 +27,7 @@ function handleInput(e) {
 <template>
   <div
     class="
+      border border-skin-border
       bg-transparent
       text-skin-link
       rounded-3xl
@@ -36,12 +36,10 @@ function handleInput(e) {
       text-left
       w-full
       mb-2
-      flex
-      px-3
       focus-within:border-skin-link
       hover:border-skin-link
     "
-    :class="[border == 'false' ? '' :'border border-skin-border' , { '!border-red': error }]"
+    :class="{ '!border-red': error }"
   >
     <div class="text-color mr-2">
       <slot name="label" />

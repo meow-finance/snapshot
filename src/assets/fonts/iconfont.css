@@ -222,10 +222,9 @@
 }
 
 .iconarrow-up:before {
-  content: "\e75c";
+  content: "\e75d";
 }
 
 .iconarrow-down:before {
   content: "\e75d";
 }
-

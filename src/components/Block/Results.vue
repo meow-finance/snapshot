@@ -56,7 +56,7 @@ async function downloadReport() {
 </script>
 
 <template>
-  <Block
+  <BlockShadow
     :loading="!loaded"
     :title="ts >= proposal.end ? $t('results') : $t('currentResults')"
   >
@@ -106,5 +106,5 @@ async function downloadReport() {
         {{ $t('downloadReport') }}
       </UiButton>
     </div>
-  </Block>
+  </BlockShadow>
 </template>

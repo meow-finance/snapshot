@@ -23,16 +23,16 @@ function selectChoice(i) {
 
 <template>
   <div class="mb-3">
-    <UiButton
-      v-for="(choice, i) in proposal.choices"
-      :key="i"
-      @click="selectChoice(i + 1)"
-      class="block w-full mb-2"
-      :class="selectedChoices.includes(i + 1) && 'button--active'"
-    >
-      {{ _shorten(choice, 32) }}
-
-      <PluginAragonGovern :proposal="proposal" />
-    </UiButton>
+    <div  @click="selectChoice(i + 1)" v-for="(choice, i) in proposal.choices"   :key="i" class="flex">
+        <UiMeowRadio :active="selectedChoices.includes(i + 1)" width="30" height="30"></UiMeowRadio>
+        <UiButton
+          class="block w-full mb-2"
+          :class="selectedChoices.includes(i + 1) && 'button--active'"
+        >
+          {{ _shorten(choice, 32) }}
+          <PluginAragonGovern :proposal="proposal" />
+        </UiButton>
+    </div>
   </div>
 </template>
+

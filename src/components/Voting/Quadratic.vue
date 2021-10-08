@@ -63,7 +63,7 @@ watch(selectedChoices.value, currentValue => {
             content: choice
           }"
         >
-          <span class="truncated w-full">
+          <span class="truncated w-full" style="padding-top: 5px;">
             {{ choice }}
           </span>
         </div>

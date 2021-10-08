@@ -21,7 +21,8 @@ const props = defineProps({
   important: {
     type: [Boolean, Array],
     default: false
-  }
+  },
+  additionalClass: String,
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -109,5 +110,6 @@ onMounted(() => resize());
     :style="computedStyles"
     v-model="val"
     @focus="resize"
+    :class="[additionalClass]"
   ></textarea>
 </template>

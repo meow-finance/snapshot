@@ -177,7 +177,7 @@ async function loadProposal() {
 }
 
 onMounted(async () => {
-  nameForm.value.focus();
+  // nameForm.value.focus();
   addChoice(2);
 
   if (props.from) loadProposal();
@@ -194,9 +194,9 @@ watchEffect(async () => {
 </script>
 
 <template>
-  <Layout v-bind="$attrs">
+  <Layout v-bind="$attrs" style="padding-top: 1rem;">
     <template #content-left>
-      <div class="px-4 md:px-0 mb-3">
+      <!-- <div class="px-4 md:px-0 mb-3">
         <router-link
           :to="domain ? { path: '/' } : { name: 'spaceProposals' }"
           class="text-color"
@@ -204,7 +204,9 @@ watchEffect(async () => {
           <Icon name="back" size="22" class="!align-middle" />
           {{ space.name }}
         </router-link>
-      </div>
+      </div> -->
+
+      <!-- Hint validation -->
       <Block v-if="passValidation[0] === false">
         <Icon name="warning" class="mr-1" />
         <span v-if="passValidation[1] === 'basic'">
@@ -226,32 +228,40 @@ watchEffect(async () => {
           }}
         </span>
       </Block>
+
+
+      <!-- Input -->
       <div class="px-4 md:px-0">
         <div class="flex flex-col mb-6">
-          <input
+          <h4>Title</h4>
+          <UiInputBorder
             v-model="form.name"
             maxlength="128"
             class="text-2xl font-bold mb-2 input"
-            :placeholder="$t('create.question')"
-            ref="nameForm"
+            additionalClass="input-border"
           />
+          <h4>Content</h4>
           <TextareaAutosize
             v-model="form.body"
             class="input pt-1"
-            :placeholder="$t('create.content')"
+            additionalClass="input-border p-12"
           />
           <div class="mb-6">
             <p v-if="form.body.length > bodyLimit" class="!text-red mt-4">
               -{{ _n(-(bodyLimit - form.body.length)) }}
             </p>
           </div>
+          <!-- Preview -->
           <div v-if="form.body">
-            <h4 class="mb-4">{{ $t('create.preview') }}</h4>
-            <UiMarkdown :body="form.body" />
+             <BlockShadow :title="$t('create.preview')">
+                <UiMarkdown :body="form.body" />
+             </BlockShadow>
           </div>
         </div>
       </div>
-      <Block :title="$t('create.choices')">
+
+      <!-- Choices -->
+      <BlockShadow :title="$t('create.choices')">
         <div v-if="choices.length > 0" class="overflow-hidden mb-2">
           <draggable
             v-model="choices"
@@ -260,25 +270,29 @@ watchEffect(async () => {
           >
             <template #item="{ element, index }">
               <UiInput
+                border="false"
                 v-model="element.text"
                 maxlength="32"
-                additionalClass="text-center"
-                ><template v-slot:label
-                  ><span class="text-skin-link">{{ index + 1 }}</span></template
+                additionalClass="input-border"
                 >
-                <template v-slot:info
-                  ><span @click="removeChoice(index)">
-                    <Icon name="close" size="12" />
+                <template v-slot:label>
+                  <span class="text-skin-link">{{ index + 1 }}</span>
+                </template>
+                <template v-slot:info>
+                  <span @click="removeChoice(index)" class="icon-delete">
+                    <IconFont name="close" size="22" />
                   </span>
                 </template>
               </UiInput>
             </template>
           </draggable>
         </div>
-        <UiButton @click="addChoice(1)" class="block w-full">
+        <div class="flex-center">
+          <UiButton id="add" @click="addChoice(1)" class="h-40">
           {{ $t('create.addChoice') }}
-        </UiButton>
-      </Block>
+          </UiButton>
+        </div>
+      </BlockShadow>
       <PluginSafeSnapConfig
         v-if="space?.plugins?.safeSnap"
         :create="true"
@@ -288,8 +302,11 @@ watchEffect(async () => {
         v-model="form.metadata.plugins.safeSnap"
       />
     </template>
+
+
+    <!-- Action -->
     <template #sidebar-right>
-      <Block
+      <BlockShadow
         :title="$t('actions')"
         :icon="
           space.plugins && Object.keys(space.plugins).length > 0
@@ -322,6 +339,7 @@ watchEffect(async () => {
               type="number"
               class="input w-full text-center"
               :placeholder="$t('create.snapshotBlock')"
+              style="color: #ffffff;"
             />
           </UiButton>
         </div>
@@ -329,12 +347,14 @@ watchEffect(async () => {
           @click="clickSubmit"
           :disabled="!isValid"
           :loading="loading || queryLoading"
-          class="block w-full button--submit"
+          class="w-full button--submit"
         >
           {{ $t('create.publish') }}
         </UiButton>
-      </Block>
+      </BlockShadow>
     </template>
+
+
   </Layout>
   <teleport to="#modal">
     <ModalSelectDate
@@ -366,7 +386,7 @@ watchEffect(async () => {
   </teleport>
 </template>
 
-<style>
+<style scoped>
 .list-leave-active,
 .list-enter-active {
   transition: all 0.3s;
@@ -377,5 +397,20 @@ watchEffect(async () => {
 .list-enter,
 .list-leave-to {
   opacity: 0;
+}
+.p-12
+{
+  padding-top: 12px !important;
+}
+.icon-delete
+{
+  padding-left: 10px;
+  color: rgb(194, 6, 6);
+  cursor: pointer;
+}
+.flex-center
+{
+  display: flex;
+  justify-content: center;
 }
 </style>

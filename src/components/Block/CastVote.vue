@@ -27,7 +27,7 @@ function emitChoice(c) {
 </script>
 
 <template>
-  <Block class="mb-4" :title="$t('proposal.castVote')">
+  <BlockShadow class="mb-4" :title="$t('proposal.castVote')">
     <div class="mb-3">
       <VotingSingleChoice
         v-if="proposal.type === 'single-choice'"
@@ -57,5 +57,5 @@ function emitChoice(c) {
     >
       {{ $t('proposal.vote') }}
     </UiButton>
-  </Block>
+  </BlockShadow>
 </template>
