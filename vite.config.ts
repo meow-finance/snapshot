@@ -14,7 +14,7 @@ export default defineConfig({
         refSugar: true
       }
     }),
-    ViteComponents({ deep: true, directoryAsNamespace: true }),
+    ViteComponents({ deep: true, directoryAsNamespace: true ,  globalComponentsDeclaration: true }),
     visualizer({
       filename: './dist/stats.html',
       template: 'sunburst',
